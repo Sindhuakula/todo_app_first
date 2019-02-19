@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0;
+  min-width: 250px;
+  background-color: solid #dddddd;
+}
+/* Include the padding and border in an element's total width and height */
+* {
+  box-sizing: border-box;
+}
+/* container for the form */
+.container {
+  padding: 100px 200px 46px 200px;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px white;
+  text-align: center;
+  padding: 8px;
+}
+/* Add a "checked" mark when clicked on */
+table.checked::before {
+  content: '';
+  position: absolute;
+  border-color: #fff;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 16px;
+  transform: rotate(45deg);
+  height: 15px;
+  width: 7px;
+}
+/* Style the close button */
+.close {
+  position: absolute;
+  right: 0;
+  padding: 12px 12px 12px 16px;
+}
+.close:hover {
+  background-color: #f44336;
+  color: white;
+}
+/* Style the header */
+.header {
+  background-color: black;
+  padding: 30px 40px;
+  color: white;
+  text-align: center;
+}
+/* Clear floats after the header */
+.header:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.checked {
+  color: black;
+  text-decoration: line-through;
+}
+
+tr td.checked::before {
+  content: '';
+  position: absolute;
+  border-color: white;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 16px;
+  transform: rotate(45deg);
+  height: 15px;
+  width: 7px;
+}
+/* Style the input */
+input {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  width: 25%;
+  padding: 10px;
+  float: left;
+  font-size: 16px;
+}
+.highlighter {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  border-color: darkred;
+  width: 25%;
+  padding: 10px;
+  float: left;
+  font-size: 16px;
+}
+select {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  width: 25%;
+  padding: 10px;
+  float: left;
+  font-size: 16px;
+}
+/* Style the "Add" button */
+.addButton {
+  padding: 10px;
+  width: 25%;
+  height: 60%;
+  background: #d9d9d9;
+  color: #555;
+  float: left;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 0;
+}
+.uputton {
+  padding: 10px;
+  width: 25%;
+  height: 60%;
+  background: #d9d9d9;
+  color: #555;
+  float: right;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 0;
+  visibility: hidden;
+}
+/* style for update button*/
+.upButton {
+  padding: 10px;
+  width: 50%;
+  background: #d9d9d9;
+  color: #555;
+  float: left;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 0;
+}
+</style>
+</head>
+<body onload="displayer()">
+  <script>
+     var focuscheckvalue=0;
+  var maOb = [{item:"todoapp",describe:"basic list",priority:1},{item:"byeapp",describe:"list",priority:4}]
+  function displayer(){
+var text="";
+for(var i=0;i<maOb.length;i++)
+{
+  text += "<tr id="+i+"><td><input type='checkbox' id='checkerbox' > </td><td  id='myitemval' class='status'> "+ maOb[i].item +" </td><td> "+maOb[i].describe +" </td><td> "+ maOb[i].priority+" </td></tr>";
+}
+document.getElementById("myInput").value = "";
+document.getElementById("myDescription").value = "";
+document.getElementById("prior").value = "0";
+  document.getElementById("myUL").innerHTML = text ;
+  }
+  function loader()
+  {
+    document.getElementById('buttonof').style.visibility="visible";
+    document.getElementById('butupa').style.visibility="hidden";
+    document.getElementById('butcan').style.visibility="hidden";
+    document.getElementById('myInput').readOnly=false;
+    displayer();
+  }
+  function eleupdate(){
+    var a = {
+    item : document.getElementById("myInput").value,
+    describe : document.getElementById("myDescription").value,
+    priority : document.getElementById("prior").value
+  };
+  for(i=0;i<maOb.length;i++)
+  {
+    if((a["item"]) ==(maOb[i]["item"]))  {
+      maOb[i]["describe"]=a["describe"];maOb[i]["priority"]=a["priority"];
+    }
+  }loader();
+  }
+  // Update a column
+  function updater() {
+    var allRows = document.getElementById('myUL').getElementsByTagName('tr');
+    var root = allRows[0].parentNode;
+    var allInp = root.getElementsByTagName('input');
+    var elem = document.getElementsByTagName('td');
+    for(var i=allInp.length-1;i>=0;i--){
+      var k;var flag=0;
+    	if((allInp[i].getAttribute('type')=='checkbox')&&(allInp[i].checked)){
+        k=i;
+        break;}
+      }
+      document.getElementById('myInput').value=maOb[k].item;
+      document.getElementById('prior').value=maOb[k].priority;
+      document.getElementById('myDescription').value=maOb[k].describe;
+      document.getElementById('buttonof').style.visibility="hidden";
+      document.getElementById('butupa').style.visibility="visible";
+      document.getElementById('butcan').style.visibility="visible";
+      document.getElementById('myInput').readOnly=true;
+    }
+  // Delete rows
+  function remover(){
+  var allRows = document.getElementById('myUL').getElementsByTagName('tr');
+  var root = allRows[0].parentNode;
+  var allInp = root.getElementsByTagName('input');
+  var elem = document.getElementsByTagName('td');
+  for(var i=allInp.length-1;i>=0;i--){
+    var k;
+  	if((allInp[i].getAttribute('type')=='checkbox')&&(allInp[i].checked)){
+      var d = maOb.length;
+      for(var l=0;l<=i;l++)
+      {
+        var x = maOb.shift();
+        maOb.push(x);
+        console.log(maOb[maOb.length-1].item);
+      }
+      maOb.pop();
+      for(var t =i+1;t<d;t++)
+      {
+        var x = maOb.shift();
+        maOb.push(x);
+      }
+      }
+  	}
+    	displayer();
+  }
+  // Adding new Elements
+  function newElement(){
+    var a = {
+    item : document.getElementById("myInput").value,
+    describe : document.getElementById("myDescription").value,
+    priority : document.getElementById("prior").value
+  };
+  if ((a["item"]) === '') {
+        document.getElementById("myInput").value = "";
+        document.getElementById("myDescription").value = "";
+        alert("Item name is mandatory!!");
+        return;
+      }
+      maOb.push(a);
+      displayer();
+    }
+
+    // checking the items
+    function mybblur() {
+      var k = document.getElementById("myInput").value ;
+      for(i=0;i<maOb.length;i++)
+      {
+        if(k ==(maOb[i]["item"])){
+            document.getElementById('duplicateerror').innerHTML="Element already exists";
+            document.getElementById('myInput').style="background-color: red";
+            document.getElementById('myInput').focus();           
+        }
+        
+      }
+    }
+    function myBlur(){
+      document.getElementById('duplicateerror').innerHTML=" ";
+      document.getElementById('myInput').style="background-color: white";
+    }
+    function toggler(source){
+        checkboxes = document.getElementsByTagName('input');
+  for(var i=0;i<checkboxes.length;i++) {
+      if(checkboxes[i].getAttribute('type')=='checkbox')
+            checkboxes[i].checked = source.checked;
+  }
+    }
+</script>
+<div class="container">
+<div id="myDIV" class="header">
+  <h2 style="margin:5px">To Do List</h2>
+<input type="text" id="myInput" placeholder="Item name..." onfocusout="mybblur()"/>
+<input type="text" id="myDescription" placeholder="Description..." onfocus="myBlur()">
+<select  id="prior">
+  <option value="0">0</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+</select>
+<button onclick="newElement()" class="addButton" id="buttonof" >Add</button>
+<button onclick="eleupdate()" class="uputton" id="butupa" >Update</button>
+<p id="duplicateerror"></p>
+</div>
+<div id="myDIV">
+<table>
+  <tr><th>select <input type="checkbox" onclick="toggler(this)" ></th><th>Item name</th><th>Description</th><th>Priority</th></tr>
+</table>
+<table  id="myUL"></table>
+<div>
+<span onclick="remover()" class="upButton">Remove</span>
+<span onclick="updater()" class="upButton">Update</span>
+</div></div>
+<button onclick="loader()" class="uputton" id="butcan" >Cancel</button>
+</div>
+</body>
+</html>
